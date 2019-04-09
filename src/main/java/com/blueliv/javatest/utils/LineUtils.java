@@ -26,7 +26,7 @@ public class LineUtils {
     }
 
     /**
-     * This method start the read file process.
+     * This method starts the file processing.
      *
      * @param args Console data entry.
      */
@@ -72,7 +72,7 @@ public class LineUtils {
     }
 
     /**
-     * this method is responsible for reading a line
+     * This method is responsible for reading a line
      * depending on the format and filter being applied.
      *
      * @param line        Current line.
@@ -110,7 +110,7 @@ public class LineUtils {
     }
 
     /**
-     * this method validate current line by format.
+     * This method validates the current line according to the provided format.
      *
      * @param line   Current line.
      * @param format Line format ("F1" or "F2").
@@ -125,7 +125,7 @@ public class LineUtils {
     }
 
     /**
-     * tThis method is responsible for setting up a output line.
+     * This method is responsible for setting up the output line.
      *
      * @param line       Current line.
      * @param regex      Search value.

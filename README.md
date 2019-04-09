@@ -3,7 +3,7 @@
 _ReadFile_ program ingesting a text ﬁle and returns a specific output.This output will depend on the input filter.
 
 ### File Format
-Each line of the file follows the next structure:
+Each line of the file has the following structure:
 1. Starts with F or D.
 2. If F, this is a "format" line and two formats can be provided (1 or 2).
 3. If D, this is a "data" line whose format is defined by the closest above format line.
@@ -20,8 +20,8 @@ Each line of the file follows the next structure:
     
 ### Arguments
 1. FILE: Location of FILE.
-2. FILTER: Filter to applying in File (CITI or ID).
-3. FILTER VALUE: Citi name or ID value.
+2. FILTER: Filter to apply while searching (CITY or ID).
+3. FILTER VALUE: City name or ID value.
 
 ### Installation
 1. Clone or download the project in GitHub.

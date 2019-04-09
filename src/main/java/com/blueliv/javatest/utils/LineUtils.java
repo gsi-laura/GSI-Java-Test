@@ -32,18 +32,18 @@ public class LineUtils {
      */
     private void startProcess(String args[]) throws IOException {
         String path = args[0];
-        String filterType = args[1];
+        FilterType filterType = FilterType.valueOf(args[1]);
         String filterValue = args[2];
         Set<String> hashSet = new HashSet<>();
         try (FileInputStream inputStream = new FileInputStream(path); Scanner sc = new Scanner(inputStream, "UTF-8")) {
 
-            String format = null;
+            FormatType format = null;
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
                 String childline;
                 if (line.startsWith(FormatType.INITIAL.getFormatTypeValue())) {
-                    format = line;
-                    if (Validations.SUCCESS_MESSAGE.equals(Validations.validateFormatLine(line))) {
+                    format = FormatType.valueOf(line);
+                    if (Validations.validateFormatType(line)) {
                         childline = sc.nextLine();
                     } else {
                         return;
@@ -51,13 +51,13 @@ public class LineUtils {
                 } else {
                     childline = line;
                 }
-                Optional<String> processLine = processingLine(childline, format, filterType, filterValue);
-                if (processLine.isPresent()) {
-                    String printLine = processLine.get();
-                    if (!hashSet.contains(printLine)) {
-                        System.out.println(printLine);
+                String processLine = processingLine(childline, format, filterType, filterValue);
+
+                if (processLine != null) {
+                    if (!hashSet.contains(processLine)) {
+                        System.out.println(processLine);
                         if (FilterType.ID.getFilterTypeValue().equals(filterType))
-                            hashSet.add(printLine);
+                            hashSet.add(processLine);
                     }
                 }
             }
@@ -80,32 +80,32 @@ public class LineUtils {
      * @param filterValue Search value.
      * @return Optional.
      */
-    public Optional<String> processingLine(String line, String format, String filterType, String filterValue) {
+    public String processingLine(String line, FormatType format, FilterType filterType, String filterValue) {
         if (line.startsWith(FormatType.INFO_INIT.getFormatTypeValue())) {
 
             String regex = null;
 
             if (validateLineFormat(line, format)) {
-                if (FormatType.F1.getFormatTypeValue().equals(format) && FilterType.CITY.getFilterTypeValue().equals(filterType))
+                if (FormatType.F1.equals(format) && FilterType.CITY.equals(filterType))
                     regex = "," + filterValue + ",";
 
-                if (FormatType.F1.getFormatTypeValue().equals(format) && FilterType.ID.getFilterTypeValue().equals(filterType))
+                if (FormatType.F1.equals(format) && FilterType.ID.equals(filterType))
                     regex = "," + filterValue;
 
-                if (FormatType.F2.getFormatTypeValue().equals(format) && FilterType.CITY.getFilterTypeValue().equals(filterType))
+                if (FormatType.F2.equals(format) && FilterType.CITY.equals(filterType))
                     regex = "; " + filterValue + " ;";
 
-                if (FormatType.F2.getFormatTypeValue().equals(format) && FilterType.ID.getFilterTypeValue().equals(filterType)) {
+                if (FormatType.F2.equals(format) && FilterType.ID.equals(filterType)) {
                     filterValue = filterValue.substring(0, 8) + "-" + filterValue.substring(8, 9);
                     regex = "; " + filterValue;
                 }
 
                 if (line.contains(regex)) {
-                    return Optional.of(getLineResponse(line, regex, format, filterType));
+                    return getLineResponse(line, regex, format, filterType);
                 }
             }
         }
-        return Optional.empty();
+        return null;
     }
 
     /**
@@ -115,10 +115,10 @@ public class LineUtils {
      * @param format Line format ("F1" or "F2").
      * @return boolean.
      */
-    public boolean validateLineFormat(String line, String format) {
-        if (FormatType.F1.getFormatTypeValue().equals(format))
+    public boolean validateLineFormat(String line, FormatType format) {
+        if (FormatType.F1.equals(format))
             return PATTER_F1.matcher(line).matches();
-        if (FormatType.F2.getFormatTypeValue().equals(format))
+        if (FormatType.F2.equals(format))
             return PATTER_F2.matcher(line).matches();
         return false;
     }
@@ -132,17 +132,17 @@ public class LineUtils {
      * @param filterType Filter type that is applied to the line ("CITY" or "ID").
      * @return String Line out.
      */
-    public String getLineResponse(String line, String regex, String format, String filterType) {
+    public String getLineResponse(String line, String regex, FormatType format, FilterType filterType) {
         String substring = line.substring(2);
         String[] splitInfo = substring.split(regex);
-        if (filterType.equals(FilterType.CITY.getFilterTypeValue())) {
-            if (format.equals(FormatType.F1.getFormatTypeValue()))
+        if (filterType.equals(FilterType.CITY)) {
+            if (format.equals(FormatType.F1))
                 return splitInfo[0] + "," + splitInfo[1];
             else
                 return splitInfo[0].trim() + "," + splitInfo[1].replace("-", "").trim();
         } else {
             String[] splitCity;
-            if (format.equals(FormatType.F1.getFormatTypeValue()))
+            if (format.equals(FormatType.F1))
                 splitCity = splitInfo[0].split(",");
             else
                 splitCity = splitInfo[0].split(" ; ");

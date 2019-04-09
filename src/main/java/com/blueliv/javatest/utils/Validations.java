@@ -24,7 +24,7 @@ public class Validations {
      * @exception ValidationsExceptions
      * @see ValidationsExceptions
      */
-    public static String validateCommand(String args[]) {
+    public static void validateCommand(String args[]) {
         if (args == null) {
             throw new ValidationsExceptions(INVALID_COMMAND_SIZE_MESSAGE);
         }
@@ -34,18 +34,16 @@ public class Validations {
         if (!args[1].equals(FilterType.CITY.getFilterTypeValue()) && !args[1].equals(FilterType.ID.getFilterTypeValue())) {
             throw new ValidationsExceptions(INVALID_COMMAND_FILTER);
         }
-        return SUCCESS_MESSAGE;
     }
     /**
      * This method validates format line.
      * @param line Current line.
      * @return String Validation success message or error message.
      */
-    public static String validateFormatLine(String line) {
+    public static boolean validateFormatType(String line) {
         if (!line.equals(FormatType.F1.getFormatTypeValue()) && !line.equals(FormatType.F2.getFormatTypeValue())) {
-            System.out.println(INVALID_FORMAT_LINE);
-            return ERROR_MESSAGE;
+            throw new ValidationsExceptions(INVALID_FORMAT_LINE);
         }
-        return SUCCESS_MESSAGE;
+        return true;
     }
 }

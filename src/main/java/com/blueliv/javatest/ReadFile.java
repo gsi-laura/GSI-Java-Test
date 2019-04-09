@@ -25,13 +25,12 @@ public class ReadFile {
      */
     public static void main(String args[]) {
         try {
-            if (Validations.SUCCESS_MESSAGE.equals(Validations.validateCommand(args))) {
-                LineUtils.start(args);
-            }
+            Validations.validateCommand(args);
+            LineUtils.start(args);
         }catch (ValidationsExceptions validationsExceptions){
-            System.out.println(validationsExceptions.getMessage());
+            System.err.println(validationsExceptions.getMessage());
         } catch (IOException e) {
-            System.out.println(Validations.FILE_ERROR);
+            System.err.println(Validations.FILE_ERROR);
         }
     }
 

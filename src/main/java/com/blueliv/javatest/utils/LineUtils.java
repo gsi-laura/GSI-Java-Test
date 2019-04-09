@@ -40,26 +40,27 @@ public class LineUtils {
             FormatType format = null;
             while (sc.hasNextLine()) {
                 String line = sc.nextLine();
-                String childline;
-                if (line.startsWith(FormatType.INITIAL.getFormatTypeValue())) {
-                    format = FormatType.valueOf(line);
-                    if (Validations.validateFormatType(line)) {
-                        childline = sc.nextLine();
-                    } else {
-                        return;
+                if (line.startsWith("F")) {
+                    try {
+                        format = FormatType.valueOf(line);
+                    } catch (IllegalArgumentException ex) {
                     }
                 } else {
-                    childline = line;
-                }
-                String processLine = processingLine(childline, format, filterType, filterValue);
-
-                if (processLine != null) {
-                    if (!hashSet.contains(processLine)) {
-                        System.out.println(processLine);
-                        if (FilterType.ID.getFilterTypeValue().equals(filterType))
-                            hashSet.add(processLine);
+                    if (format ==null){
+                        System.err.println("No current format. Ignoring line");
+                    }
+                    else {
+                        String processLine = processingLine(line, format, filterType, filterValue);
+                        if (processLine != null) {
+                            if (!hashSet.contains(processLine)) {
+                                System.out.println(processLine);
+                                if (FilterType.ID.getFilterTypeValue().equals(filterType))
+                                    hashSet.add(processLine);
+                            }
+                        }
                     }
                 }
+
             }
 
             // note that Scanner suppresses exceptions

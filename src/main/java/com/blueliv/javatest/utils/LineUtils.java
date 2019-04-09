@@ -16,7 +16,7 @@ import java.util.regex.*;
 public class LineUtils {
 
     private static final String RE_F1 = "(D)(\\s)((?:[a-zA-Z]+)).*?(,)((?:[A-Z]+)).*?(,)(\\d{8})([A-Z])";
-    private static final String RE_F2 = "(D)(\\s)((?:[a-zA-Z]+)).*?(\\s+;\\s+)((?:[A-Z]+)).*?(\\s+;\\s+)(\\d{8})(-)([A-Z])";
+    private static final String RE_F2 = "(D)(\\s)((?:[a-zA-Z]+)).*?(\\s;\\s)((?:[A-Z]+)).*?(\\s;\\s)(\\d{8})(-)([A-Z])";
     private static Pattern PATTER_F1 = Pattern.compile(RE_F1);
     private static Pattern PATTER_F2 = Pattern.compile(RE_F2);
 
